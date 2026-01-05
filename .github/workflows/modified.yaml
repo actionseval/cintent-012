@@ -1,0 +1,74 @@
+name: Lint code and run tests
+
+# CINTENT >> MANUAL_TRIGGER
+# on:
+#   push:
+#     branches: [master]
+#   pull_request:
+#     branches: [master]
+#   schedule:
+#     - cron: '0 0 * * MON'
+on: [repository_dispatch, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        python-version: [3.9]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@a606c80c34ec190c6a20dea33d6d58ddb6c4e0cc
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-v1-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-v1-
+
+    - name: Install dependencies
+      run: |
+        pip install .[dev]
+        
+    - name: Lint with flake8
+      run: |
+        flake8
+      if: always()
+      
+    - name: Format with black
+      run: |
+        black --check --line-length 120 .
+      if: always()
+
+    - name: Import sort
+      run: |
+        isort --check-only .
+      if: always()
+
+    - name: Test with pytest
+      run: |
+        pytest
+      if: always()
+
+    # CINTENT >> INSERT_CINTENT
+    - name: Upload CIntent Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ${{ env.CINTENT_ARTIFACT_NAME }}
+        path: ${{ env.CINTENT_LOGS }}
