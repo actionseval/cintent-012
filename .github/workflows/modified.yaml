@@ -25,9 +25,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # CINTENT >> INSERT_CINTENT
-    - uses: JavidDitty/setup-cintent@71bd856662c7fab8b08c99aedbfd7c3992cfdf95
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -40,6 +37,9 @@ jobs:
           key: ${{ runner.os }}-pip-v1-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-v1-
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@71bd856662c7fab8b08c99aedbfd7c3992cfdf95
 
     - name: Install dependencies
       run: |
