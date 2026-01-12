@@ -38,13 +38,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-v1-
 
-    # CINTENT >> INSERT_CINTENT
-    - uses: JavidDitty/setup-cintent@71bd856662c7fab8b08c99aedbfd7c3992cfdf95
-
     - name: Install dependencies
       run: |
         pip install .[dev]
-        
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@71bd856662c7fab8b08c99aedbfd7c3992cfdf95
+
     - name: Lint with flake8
       run: |
         flake8
