@@ -14,9 +14,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    defaults:
-      run:
-        shell: bash -l {0}
+    # defaults:
+    #   run:
+    #     shell: bash -l {0}
     strategy:
       matrix:
         python-version: [3.9]
@@ -25,21 +25,22 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # CINTENT >> INSERT_CINTENT
-    - uses: JavidDitty/setup-cintent@64faaac1333aabc2e0a00af6109b48ec4d8071bf
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Cache pip
-      uses: actions/cache@v4
-      with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-v1-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-v1-
+    # CINTENT >> REMOVE_CACHE
+    # - name: Cache pip
+    #   uses: actions/cache@v4
+    #   with:
+    #       path: ~/.cache/pip
+    #       key: ${{ runner.os }}-pip-v1-${{ hashFiles('**/requirements.txt') }}
+    #       restore-keys: |
+    #         ${{ runner.os }}-pip-v1-
+
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@64faaac1333aabc2e0a00af6109b48ec4d8071bf
 
     - name: Install dependencies
       run: |
