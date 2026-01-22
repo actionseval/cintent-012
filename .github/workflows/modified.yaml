@@ -25,6 +25,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # CINTENT >> INSERT_CINTENT
+    - uses: JavidDitty/setup-cintent@64faaac1333aabc2e0a00af6109b48ec4d8071bf
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -41,9 +44,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install .[dev]
-
-    # CINTENT >> INSERT_CINTENT
-    - uses: JavidDitty/setup-cintent@71bd856662c7fab8b08c99aedbfd7c3992cfdf95
 
     - name: Lint with flake8
       run: |
